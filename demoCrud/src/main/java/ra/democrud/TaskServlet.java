@@ -39,7 +39,12 @@ public class TaskServlet extends HttpServlet {
                     response.sendRedirect(request.getContextPath()+"/");
                     break;
                 case "EDIT":
-                    // tìm ra công việc với tham số id gửi lên Task 
+                    // tìm ra công việc với tham số id gửi lên Task
+                    int idEdit = Integer.parseInt(request.getParameter("id"));
+                    Task taskEdit = findById(idEdit);
+                    request.setAttribute("taskEdit",taskEdit);
+                    request.getRequestDispatcher("/editTask.jsp").forward(request,response);
+                    break;
             }
         }
     }
@@ -56,6 +61,14 @@ public class TaskServlet extends HttpServlet {
                     String content = request.getParameter("content");
                     Task newTask = new Task(id,content,false);
                     tasks.add(newTask);
+                    response.sendRedirect(request.getContextPath()+"/");
+                    break;
+                case "UPDATE":
+                    int idEdit = Integer.parseInt(request.getParameter("id"));
+                    String contentEdit = request.getParameter("content");
+                    boolean statusEdit = Boolean.parseBoolean(request.getParameter("status"));
+                    Task editTask = new Task(idEdit,contentEdit,statusEdit);
+                    tasks.set(tasks.indexOf(findById(idEdit)),editTask);
                     response.sendRedirect(request.getContextPath()+"/");
                     break;
             }
